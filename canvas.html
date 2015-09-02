@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>简易画板</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="canvas.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	window.onload = function (){
+		canvas({
+			linecolor:"yellow",
+			linewidth:1,
+			canvas:"canvas"
+		});
+	}
+	</script>
+</head>
+<body>
+	<canvas id="canvas" style="width: 600px;height: 400px;/*border: 1px solid #000;*//*margin: auto;*/"></canvas>
+</body>
+</html>
