@@ -8,7 +8,7 @@
 	<script type="text/javascript">
 	window.onload = function (){
 		canvas({
-			linecolor:"yellow",
+			linecolor:"blue",
 			linewidth:1,
 			canvas:"canvas"
 		});
@@ -16,6 +16,27 @@
 	</script>
 </head>
 <body>
-	<canvas id="canvas" width="600" height="400"></canvas>
+	<div class="canvas">
+		<canvas id="canvas" width="600" height="400"></canvas>
+	</div>
+	<div class="config">
+		颜色<select name="" id="DrawColor">
+				<option value="black">black</option>
+		        <option value="blue" selected="selected">blue</option>
+		        <option value="red">red</option>
+		        <option value="green">green</option>
+		        <option value="yellow">yellow</option>
+		        <option value="gray">gray</option>
+			</select>
+		线条宽度<select name="" id="DrawWidth">
+				<option value="1">1</option>
+		        <option value="3">3</option>
+		        <option value="5" selected="selected">5</option>
+		        <option value="7">7</option>
+		        <option value="9">9</option>
+		        <option value="11">11</option>
+			</select>
+		<input type="button" value="清空画板" id="clearDraw">
+	</div>
 </body>
 </html>
