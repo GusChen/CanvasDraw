@@ -5,13 +5,6 @@
 	<title>简易画板</title>
 	<link rel="stylesheet" href="style.css">
 	<script src="canvas.js" type="text/javascript"></script>
-	<script type="text/javascript">
-	window.onload = function (){
-		canvas({
-			canvas:"canvas"
-		});
-	}
-	</script>
 </head>
 <body>
 	<div class="canvas">
@@ -41,5 +34,12 @@
 		<input type="button" value="保存" id="Save" />
 	</div>
 	<div id="img"></div>
+	<script type="text/javascript">
+	window.onload = function (){
+		canvas({
+			canvas:"canvas"
+		});
+	}
+	</script>
 </body>
 </html>

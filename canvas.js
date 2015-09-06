@@ -2,74 +2,16 @@
 	var config = {}, //基础配置
 		cvs, //dom对象
 		cxt, //canvas对象
-		lastX ,//起始位置x
-		lastY ,//起始位置y
-		Current = 0 ,//当前步骤
+		lastX, //起始位置x
+		lastY, //起始位置y
+		Current = 0, //当前步骤
 		Stack = [], //栈
-		mousePressed = false,
+		prev, //上一步
+		next, //下一步
+		mousePressed = false, //鼠标点击状态
 		canvas = function (obj) {
 			init(obj);
 		}
-	//上一步
-	function _prve () {
-		var _t = document.getElementById("prev");
-		_t.addEventListener("click", function() {
-			Current-=1;
-			if (Current == 0) {
-				document.getElementById("prev").setAttribute("disabled","disabled");
-			} else {
-				document.getElementById("prev").removeAttribute("disabled");
-			}
-			var popData = Stack[Current];
-			cxt.putImageData(popData, 0, 0);
-			if ((Stack.length - 1) == Current){
-				document.getElementById("next").setAttribute("disabled","disabled");
-			} else {
-				document.getElementById("next").removeAttribute("disabled");
-			}
-		}, false);
-		
-	}
-	//下一步
-	function _next () {
-		var _t = document.getElementById("next");
-		_t.addEventListener("click", function() {
-			Current += 1;
-			if ((Stack.length - 1) == Current){
-				document.getElementById("next").setAttribute("disabled","disabled");
-			} else {
-				document.getElementById("next").removeAttribute("disabled");
-			}
-			
-			var popData = Stack[Current];
-			cxt.putImageData(popData, 0, 0);
-			if (Current == 0) {
-				document.getElementById("prev").setAttribute("disabled","disabled");
-			} else {
-				document.getElementById("prev").removeAttribute("disabled");
-			}
-			console.log(Stack.length);
-			console.log(Current);
-		}, false);
-	}
-	//步骤进栈
-	function _Stack () {
-		//大于0 可以上一步
-		if (Stack.length > 0) {
-			document.getElementById("prev").removeAttribute("disabled");
-		}
-		if ((Stack.length - 1) >= Current){
-			document.getElementById("next").setAttribute("disabled","disabled");
-		}
-		if (Stack.length - 1 > Current) {
-			Stack.length = Current + 1;
-		}
-		Current+=1;
-		var data = cxt.getImageData(0, 0, 600, 400);
-		Stack.push(data);
-		console.log(Stack.length);
-		console.log(Current);
-	}
 	//init
 	function init (obj) {
 		//线条颜色
@@ -80,6 +22,8 @@
 		cvs = document.getElementById(obj.canvas);
 		//绘制对象
 		cxt = cvs.getContext("2d");
+		prev = document.getElementById("prev");
+		next = document.getElementById("next");
 		Mouse();
 		clear_draw();
 		setLineColor();
@@ -170,6 +114,68 @@
 				saveimg.innerHTML = "";
 				saveimg.appendChild(img);
 		},false);
+	}
+
+	//上一步
+	function _prve () {
+		prev.addEventListener("click", function() {
+			//上一步 -1
+			Current-=1;
+			//判断是否还有上一步可以执行
+			if (Current == 0) {
+				prev.setAttribute("disabled","disabled");
+			} else {
+				prev.removeAttribute("disabled");
+			}
+			//取数据
+			var popData = Stack[Current];
+			//还原画布
+			cxt.putImageData(popData, 0, 0);
+			//判断是否有下一步可以执行
+			if ((Stack.length - 1) == Current){
+				next.setAttribute("disabled","disabled");
+			} else {
+				next.removeAttribute("disabled");
+			}
+		}, false);
+		
+	}
+	//下一步
+	function _next () {
+		next.addEventListener("click", function() {
+			//上一步 +1
+			Current += 1;
+			if ((Stack.length - 1) == Current){
+				next.setAttribute("disabled","disabled");
+			} else {
+				next.removeAttribute("disabled");
+			}
+			var popData = Stack[Current];
+			cxt.putImageData(popData, 0, 0);
+			if (Current == 0) {
+				prev.setAttribute("disabled","disabled");
+			} else {
+				prev.removeAttribute("disabled");
+			}
+		}, false);
+	}
+	//步骤进栈
+	function _Stack () {
+		//大于0 可以上一步
+		if (Stack.length > 0) {
+			prev.removeAttribute("disabled");
+		}
+		//判断是否可以点击下一步
+		if ((Stack.length - 1) >= Current){
+			next.setAttribute("disabled","disabled");
+		}
+		//重新步骤 
+		if (Stack.length - 1 > Current) {
+			Stack.length = Current + 1;
+		}
+		Current+=1;
+		var data = cxt.getImageData(0, 0, 600, 400);
+		Stack.push(data);
 	}
 	//当前元素相对于浏览器的位置
 	function getOffsetRect(ele){
