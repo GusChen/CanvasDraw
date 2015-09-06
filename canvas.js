@@ -40,7 +40,7 @@
 		cvs.addEventListener("mouseleave", function (e){
 			mousePressed = false;
 		});
-		draw(100, 100, true)
+		//draw(100, 100, true)
 	}
 	//颜色
 	function setLineColor() {
