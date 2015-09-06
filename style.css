@@ -16,3 +16,7 @@ body{
 	overflow: hidden;
 	text-align: center;
 }
+#img{
+	margin: auto;
+	width: 600px;
+}

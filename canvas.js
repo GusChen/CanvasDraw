@@ -46,6 +46,7 @@
 		},false);
 		setLineColor();
 		setLineWidth();
+		SaveDraw();
 	}
 	//颜色
 	function setLineColor() {
@@ -88,7 +89,14 @@
 		lastX = x;
 		lastY = y;
 	}
-
+	function SaveDraw() {
+		document.getElementById("Save").addEventListener("click",function() {
+			var url = cxt.canvas.toDataURL('image/png'),
+				img = new Image();
+				img.src = url;
+				document.getElementById("img").appendChild(img);
+		},false);
+	}
 	//当前元素相对于浏览器的位置
 	function getOffsetRect(ele){
     	var box=ele.getBoundingClientRect();
