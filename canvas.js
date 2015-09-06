@@ -92,9 +92,11 @@
 	function SaveDraw() {
 		document.getElementById("Save").addEventListener("click",function() {
 			var url = cxt.canvas.toDataURL('image/png'),
-				img = new Image();
+				img = new Image(),
+				saveimg = document.getElementById("img");
 				img.src = url;
-				document.getElementById("img").appendChild(img);
+				saveimg.innerHTML = "";
+				saveimg.appendChild(img);
 		},false);
 	}
 	//当前元素相对于浏览器的位置
