@@ -4,27 +4,101 @@
 		cxt, //canvas对象
 		lastX ,//起始位置x
 		lastY ,//起始位置y
+		Current = 0 ,//当前步骤
+		Stack = [], //栈
 		mousePressed = false,
 		canvas = function (obj) {
 			init(obj);
 		}
+	//上一步
+	function _prve () {
+		var _t = document.getElementById("prev");
+		_t.addEventListener("click", function() {
+			Current-=1;
+			if (Current == 0) {
+				document.getElementById("prev").setAttribute("disabled","disabled");
+			} else {
+				document.getElementById("prev").removeAttribute("disabled");
+			}
+			var popData = Stack[Current];
+			cxt.putImageData(popData, 0, 0);
+			if ((Stack.length - 1) == Current){
+				document.getElementById("next").setAttribute("disabled","disabled");
+			} else {
+				document.getElementById("next").removeAttribute("disabled");
+			}
+		}, false);
+		
+	}
+	//下一步
+	function _next () {
+		var _t = document.getElementById("next");
+		_t.addEventListener("click", function() {
+			Current += 1;
+			if ((Stack.length - 1) == Current){
+				document.getElementById("next").setAttribute("disabled","disabled");
+			} else {
+				document.getElementById("next").removeAttribute("disabled");
+			}
+			
+			var popData = Stack[Current];
+			cxt.putImageData(popData, 0, 0);
+			if (Current == 0) {
+				document.getElementById("prev").setAttribute("disabled","disabled");
+			} else {
+				document.getElementById("prev").removeAttribute("disabled");
+			}
+			console.log(Stack.length);
+			console.log(Current);
+		}, false);
+	}
+	//步骤进栈
+	function _Stack () {
+		//大于0 可以上一步
+		if (Stack.length > 0) {
+			document.getElementById("prev").removeAttribute("disabled");
+		}
+		if ((Stack.length - 1) >= Current){
+			document.getElementById("next").setAttribute("disabled","disabled");
+		}
+		if (Stack.length - 1 > Current) {
+			Stack.length = Current + 1;
+		}
+		Current+=1;
+		var data = cxt.getImageData(0, 0, 600, 400);
+		Stack.push(data);
+		console.log(Stack.length);
+		console.log(Current);
+	}
 	//init
 	function init (obj) {
 		//线条颜色
-		config.linecolor = obj.linecolor;
+		config.linecolor = obj.linecolor || "blue";
 		//线条宽度
-		config.linewidth = obj.linewidth;
+		config.linewidth = obj.linewidth || 5;
 		//canvas
 		cvs = document.getElementById(obj.canvas);
 		//绘制对象
 		cxt = cvs.getContext("2d");
+		Mouse();
+		clear_draw();
+		setLineColor();
+		setLineWidth();
+		SaveDraw();
+		_prve();
+		_next();
+		var data = cxt.getImageData(0, 0, 600, 400);
+		Stack.push(data);
+	}
+	function Mouse() {
 		//鼠标按下
 		cvs.addEventListener("mousedown", function (e){
 			mousePressed = true;
+			
 			//draw(e.pageX - e.offsetX, e.pageY - e.offsetY, false);
 			a = getOffsetRect(this);
-
 			draw(e.pageX-a.left , e.pageY-a.top , false);
+
 		}, false);
 		//鼠标移动
 		cvs.addEventListener("mousemove", function (e){
@@ -35,35 +109,32 @@
 			}
 		},false);
 		cvs.addEventListener("mouseup", function (e){
+			_Stack();
 			mousePressed = false;
 		},false);
 		cvs.addEventListener("mouseleave", function (e){
+			//_Stack();
 			mousePressed = false;
 		});
-		//draw(100, 100, true)
-		document.getElementById("clearDraw").addEventListener("click",function (){
-			clear_draw();
-		},false);
-		setLineColor();
-		setLineWidth();
-		SaveDraw();
 	}
 	//颜色
 	function setLineColor() {
-		document.getElementById("DrawColor").addEventListener("change",function (e){
+		document.getElementById("DrawColor").addEventListener("change", function (e){
 			config.linecolor = this.value;
 		},false);
 	}
 	//线条宽度
 	function setLineWidth() {
-		document.getElementById("DrawWidth").addEventListener("change",function (e){
+		document.getElementById("DrawWidth").addEventListener("change", function (e){
 			config.linewidth = this.value;
 		},false);
 		//
 	}
 	//重置画板
 	function clear_draw() {
-		 cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height);
+		document.getElementById("clearDraw").addEventListener("click", function (){
+			cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height);
+		},false); 
 	}
 	//绘制
 	function draw(x, y, isDraw) {
@@ -89,6 +160,7 @@
 		lastX = x;
 		lastY = y;
 	}
+	//保存图片
 	function SaveDraw() {
 		document.getElementById("Save").addEventListener("click",function() {
 			var url = cxt.canvas.toDataURL('image/png'),

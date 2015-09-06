@@ -8,8 +8,6 @@
 	<script type="text/javascript">
 	window.onload = function (){
 		canvas({
-			linecolor:"blue",
-			linewidth:1,
 			canvas:"canvas"
 		});
 	}
@@ -35,9 +33,12 @@
 		        <option value="7">7</option>
 		        <option value="9">9</option>
 		        <option value="11">11</option>
+		        <a href="" t></a>
 			</select>
-		<input type="button" value="清空画板" id="clearDraw">
-		<input type="button" value="保存" id="Save">
+		<input type="button" value="上一步" id="prev" disabled = "disabled"/>
+		<input type="button" value="下一步" id="next" disabled = "disabled"/>
+		<input type="button" value="清空画板" id="clearDraw" />
+		<input type="button" value="保存" id="Save" />
 	</div>
 	<div id="img"></div>
 </body>
